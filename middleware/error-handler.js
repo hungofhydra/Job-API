@@ -22,7 +22,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       .map((item) => item.message)
       .join(',')
     customError.statusCode = 400;
-    return res.status(customError.statusCode).send(Object.values(err))
+
   }
 
   if (err.name === 'CastError') {

@@ -11,7 +11,7 @@ const register = async (req, res) => {
     // }
     const user = await User.create(req.body)
     const token = user.createJWT();
-    res.status(StatusCodes.CREATED).json({user : {name : user.name}, token})
+    res.status(StatusCodes.CREATED).json({user : {name : user.name, mail : user.email}, token})
   
 }
 
@@ -32,7 +32,42 @@ const login = async (req,res) => {
     res.status(StatusCodes.OK).json({user : {name: user.name}, token});
 }
 
+const forgotPassword = async(req,res) => {
+    const {email} = req.body
+    if (!email) throw new BadRequestError('Please provide email');
+
+    const user = await User.findOne({email})
+    if(!user) {
+        throw new UnauthenticatedError('Invalid Credentials')
+    }
+
+    const forgotPasswordToken = user.createPasswordToken();
+    res.status(StatusCodes.OK).json({user : {name: user.name}, forgotPasswordToken});
+}
+
+const resetPassword = async(req,res) => {
+   let {
+        reset : {userId, email},
+        body : {newPassword : password}
+   } = req
+
+   if (password === '') {
+    throw new BadRequestError('New password fields cannot be empty')
+    }
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
+
+    const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
+    if (!user) throw new NotFoundError(`No user with id ${userId}`);
+    
+    res.status(StatusCodes.OK).json({user});
+   
+}
+
+
 module.exports = {
     register,
-    login
+    login,
+    forgotPassword,
+    resetPassword
 }
