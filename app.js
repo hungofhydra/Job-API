@@ -19,7 +19,7 @@ app.use(express.json());
 
 // routes
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/jobs', authenticationUser , jobsRouter)
+app.use('/api/v1/jobs', authenticationUser, jobsRouter)
 app.get('/', (req, res) => {
   res.send('jobs api');
 });
