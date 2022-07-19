@@ -13,6 +13,7 @@ const getJob = async (req, res) => {
         params : {id: jobId}
     } = req
     
+
     const job = await Job.findOne({
         _id : jobId, 
         createdBy : userId
