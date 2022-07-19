@@ -1,0 +1,274 @@
+openapi: 3.0.0
+info:
+  title: Job API
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://job-api-example.herokuapp.com/api/v1/
+  variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+      - Auth
+      summary: Register
+      operationId: Register
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              name: Vu Thi Thanh Thuy
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      operationId: Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: hungotaku@gmail.com
+              password: Hung9090
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/forgot:
+    post:
+      tags:
+      - Auth
+      summary: Forgot Password
+      operationId: ForgotPassword
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+            example:
+              email: hungotaku@gmail.com
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /auth/reset:
+    post:
+      tags:
+      - Auth
+      summary: Reset Password
+      operationId: ResetPassword
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /jobs:
+    post:
+      tags:
+      - Job
+      summary: Create Jobs
+      operationId: CreateJobs
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJobsRequest'
+            example:
+              company: Test
+              position: Test
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    get:
+      tags:
+      - Job
+      summary: Get All Job
+      operationId: GetAllJob
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /jobs/{id}:
+    get:
+      tags:
+      - Job
+      summary: Get One Job
+      operationId: GetOneJob
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+      servers:
+      - url: https://job-api-example.herokuapp.com/api/v1/
+        variables: {}
+    patch:
+      tags:
+      - Job
+      summary: Update Job
+      operationId: UpdateJob
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateJobRequest'
+            example:
+              company: Random
+              position: Random
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    delete:
+      tags:
+      - Job
+      summary: Delete Job
+      operationId: DeleteJob
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    RegisterRequest:
+      title: RegisterRequest
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: Vu Thi Thanh Thuy
+    LoginRequest:
+      title: LoginRequest
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: hungotaku@gmail.com
+        password: Hung9090
+    CreateJobsRequest:
+      title: CreateJobsRequest
+      required:
+      - company
+      - position
+      type: object
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+      example:
+        company: Test
+        position: Test
+    UpdateJobRequest:
+      title: UpdateJobRequest
+      required:
+      - company
+      - position
+      type: object
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+      example:
+        company: Random
+        position: Random
+    ForgotPasswordRequest:
+      title: ForgotPasswordRequest
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+      example:
+        email: hungotaku@gmail.com
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+- name: Misc
+  description: ''
+- name: Auth
+  description: ''
+- name: Job
+  description: ''
