@@ -4,7 +4,7 @@ info:
   contact: {}
   version: '1.0'
 servers:
-- url: https://job-api-example.herokuapp.com/api/v1/
+- url: http://localhost:3000/api/v1
   variables: {}
 paths:
   /auth/register:
@@ -15,7 +15,7 @@ paths:
       operationId: Register
       parameters: []
       requestBody:
-        description: ''
+        description: 'Request email, name and password to register'
         content:
           application/json:
             schema:
@@ -27,8 +27,30 @@ paths:
         required: true
       responses:
         '200':
-          description: ''
+          description: 'Json containing user info, message and user token'
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                  user:
+                    type: object
+                    properties: 
+                      name :
+                        type: string
+                      mail :
+                        type: string
+                  token:
+                    type: string
+              example:
+                msg: Register success
+                user:
+                  name : Nguyen Tan Hung
+                  mail : nguyentanhung@gmail.com  
+                token: Token
       deprecated: false
       security: []
   /auth/login:
@@ -39,7 +61,7 @@ paths:
       operationId: Login
       parameters: []
       requestBody:
-        description: ''
+        description: 'Require email and password to logins'
         content:
           application/json:
             schema:
@@ -50,8 +72,27 @@ paths:
         required: true
       responses:
         '200':
-          description: ''
+          description: 'Json containing user info, message and user token'
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                  user:
+                    type: object
+                    properties: 
+                      name :
+                        type: string
+                  token:
+                    type: string
+              example:
+                msg: Login success
+                user: 
+                  name : 'Nguyen Tan Hung'
+                token: 'Token'
       deprecated: false
       security: []
   /auth/forgot:
@@ -62,7 +103,7 @@ paths:
       operationId: ForgotPassword
       parameters: []
       requestBody:
-        description: ''
+        description: 'Require email of user'
         content:
           application/json:
             schema:
@@ -72,8 +113,20 @@ paths:
         required: true
       responses:
         '200':
-          description: ''
+          description: 'Send Back Password Reset Token (This Token IS NOT User Token)'
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+                  forgotPasswordToken:
+                    type: string
+              example:
+                msg: Send reset password success
+                forgotPasswordToken: Token
       deprecated: false
   /auth/reset:
     post:
@@ -82,13 +135,32 @@ paths:
       summary: Reset Password
       operationId: ResetPassword
       parameters: []
+      requestBody:
+        description: 'Require new password'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+            example:
+              newPassword: '987654'
+        required: true
       responses:
         '200':
-          description: ''
+          description: 'Send back message'
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg: 
+                    type: string
+              example:
+                msg: Reset password success
       deprecated: false
       security:
       - bearer: []
+              
   /jobs:
     post:
       tags:
@@ -108,8 +180,45 @@ paths:
         required: true
       responses:
         '200':
-          description: ''
+          description: 'Return job object if create success'
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                  properties:
+                    msg:
+                      type: string
+                    job:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                        _id:
+                          type: string
+                        company:
+                          type: string
+                        position:
+                          type: string
+                        createdBy:
+                          type: string
+                        createdAt:
+                          type: string
+                        updatedAt:
+                          type: string
+                        __v:
+                          type: number
+              example:
+                msg : Create job success
+                job:           
+                    status: pending          
+                    _id: 62d7a56dbae0d436c47a58e9
+                    company: Enclave
+                    position: Cadet
+                    createdBy: 62d50d26408b151974cff860
+                    createdAt: '2022-07-20T06:49:17.843Z'
+                    updatedAt: '2022-07-20T06:49:17.843Z'    
+                    __v: '0'
       deprecated: false
       security:
       - bearer: []
@@ -121,8 +230,55 @@ paths:
       parameters: []
       responses:
         '200':
-          description: ''
+          description: 'Return array of jobs'
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                  properties:
+                    jobs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          status:
+                            type: string
+                          _id:
+                            type: string
+                          company:
+                            type: string
+                          position:
+                            type: string
+                          createdBy:
+                            type: string
+                          createdAt:
+                            type: string
+                          updatedAt:
+                            type: string
+                          __v:
+                            type: number
+                    count:
+                      type: number
+              example:
+                job:             
+                    - status: pending          
+                      _id: 62d7a56dbae0d436c47a58e9
+                      company: Enclave
+                      position: Cadet
+                      createdBy: 62d50d26408b151974cff860
+                      createdAt: '2022-07-20T06:49:17.843Z'
+                      updatedAt: '2022-07-20T06:49:17.843Z'    
+                      __v: '0'
+                    - status: pending          
+                      _id: 62d7a56dbae0d436c47a58e9
+                      company: Google
+                      position: Senior Back End Developer
+                      createdBy: 62d50d26408b151974cff860
+                      createdAt: '2022-07-20T06:49:17.843Z'
+                      updatedAt: '2022-07-20T06:49:17.843Z'    
+                      __v: '0'
+                count: '4'
       deprecated: false
       security:
       - bearer: []
@@ -144,11 +300,45 @@ paths:
         '200':
           description: ''
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                      _id:
+                        type: string
+                      company:
+                        type: string
+                      position:
+                        type: string
+                      createdBy:
+                        type: string
+                      createdAt:
+                        type: string
+                      updatedAt:
+                        type: string
+                      __v:
+                        type: number
+              example:           
+                job:           
+                  status: pending          
+                  _id: 62d7a56dbae0d436c47a58e9
+                  company: Enclave
+                  position: Cadet
+                  createdBy: 62d50d26408b151974cff860
+                  createdAt: '2022-07-20T06:49:17.843Z'
+                  updatedAt: '2022-07-20T06:49:17.843Z'    
+                  __v: '0'
       deprecated: false
       security:
       - bearer: []
       servers:
-      - url: https://job-api-example.herokuapp.com/api/v1/
+      - url: http://localhost:3000/api/v1
         variables: {}
     patch:
       tags:
@@ -177,6 +367,43 @@ paths:
         '200':
           description: ''
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                  properties:
+                    msg:
+                      type: string
+                    job:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                        _id:
+                          type: string
+                        company:
+                          type: string
+                        position:
+                          type: string
+                        createdBy:
+                          type: string
+                        createdAt:
+                          type: string
+                        updatedAt:
+                          type: string
+                        __v:
+                          type: number
+              example:
+                msg : Update job success
+                job:           
+                    status: pending          
+                    _id: 62d7a56dbae0d436c47a58e9
+                    company: Enclave
+                    position: Cadet
+                    createdBy: 62d50d26408b151974cff860
+                    createdAt: '2022-07-20T06:49:17.843Z'
+                    updatedAt: '2022-07-20T06:49:17.843Z'    
+                    __v: '0'
       deprecated: false
       security:
       - bearer: []
@@ -197,6 +424,15 @@ paths:
         '200':
           description: ''
           headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                  properties:
+                    msg:
+                      type: string
+              example:
+                msg : Delete success
       deprecated: false
       security:
       - bearer: []
@@ -211,6 +447,10 @@ components:
       type: object
       properties:
         name:
+          type: string
+        email:
+          type: string
+        password:
           type: string
       example:
         email: nguyentanhung@gmail.com
@@ -268,6 +508,16 @@ components:
           type: string
       example:
         email: nguyentanhung@gmail.com
+    ResetPasswordRequest:
+      title: ResetPasswordRequest
+      required:
+      - newPassword
+      type: object
+      properties:
+        newPassword:
+          type: string
+      example:
+        newPassword: '987654'
   securitySchemes:
     bearer:
       type: http
