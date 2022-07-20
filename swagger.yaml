@@ -198,12 +198,16 @@ paths:
           description: ''
           headers: {}
       deprecated: false
+      security:
+      - bearer: []
 components:
   schemas:
     RegisterRequest:
       title: RegisterRequest
       required:
       - name
+      - email
+      - password
       type: object
       properties:
         name:
