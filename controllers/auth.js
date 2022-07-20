@@ -11,10 +11,11 @@ const register = async (req, res) => {
     // }
     const user = await User.create(req.body)
     const token = user.createJWT();
-    res.status(StatusCodes.CREATED).json({user : {name : user.name, mail : user.email}, token})
+    res.status(StatusCodes.CREATED).json({ msg : 'Register success', user : {name : user.name, mail : user.email}, token})
   
 }
 
+//Login
 const login = async (req,res) => {
     const {email, password} = req.body
     if (!email || !password) throw new BadRequestError('Please provide email and password');
@@ -29,7 +30,7 @@ const login = async (req,res) => {
     if (!isPasswordCorrect)  throw new UnauthenticatedError('Invalid Credentials');
     //send token
     const token = user.createJWT();
-    res.status(StatusCodes.OK).json({user : {name: user.name}, token});
+    res.status(StatusCodes.OK).json({ msg : 'Login success' , user : {name: user.name}, token});
 }
 
 const forgotPassword = async(req,res) => {
@@ -42,7 +43,7 @@ const forgotPassword = async(req,res) => {
     }
 
     const forgotPasswordToken = user.createPasswordToken();
-    res.status(StatusCodes.OK).json({user : {name: user.name}, forgotPasswordToken});
+    res.status(StatusCodes.OK).json({ msg : 'Send password request success' , forgotPasswordToken});
 }
 
 const resetPassword = async(req,res) => {
@@ -60,7 +61,7 @@ const resetPassword = async(req,res) => {
     const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
     if (!user) throw new NotFoundError(`No user with id ${userId}`);
     
-    res.status(StatusCodes.OK).json({user});
+    res.status(StatusCodes.OK).json({ msg : 'Reset password success'});
    
 }
 

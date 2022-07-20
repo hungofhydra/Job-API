@@ -28,7 +28,7 @@ const createJob = async (req, res) => {
     req.body.createdBy = req.user.userId;
     const job = await Job.create(req.body)
     if (!job) throw new BadRequestError('Oops! Something Happened');
-    res.status(StatusCodes.CREATED).json({job});
+    res.status(StatusCodes.CREATED).json({msg : "Create job success",job});
 }
 
 const updateJob = async (req, res) => {
@@ -44,7 +44,7 @@ const updateJob = async (req, res) => {
 
         const job = await Job.findOneAndUpdate({_id : jobId, createdBy : userId}, req.body, {new : true, runValidators : true})
         if (!job) throw new NotFoundError(`No job with id ${jobId}`);
-        res.status(StatusCodes.OK).json({job});
+        res.status(StatusCodes.OK).json({msg: "Update sucesss", job});
 }
 
 const deleteJob = async (req, res) => {
@@ -55,7 +55,7 @@ const deleteJob = async (req, res) => {
 
     const job = await Job.findOneAndRemove({_id : jobId, createdBy : userId}) 
     if (!job) throw new NotFoundError(`No job with id ${jobId}`);
-    res.status(StatusCodes.OK).send("Delete success");
+    res.status(StatusCodes.OK).json({msg: "Delete sucesss"});
 }
 
 
