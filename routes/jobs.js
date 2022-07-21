@@ -1,4 +1,5 @@
 const express = require('express');
+const checkObjectid = require('../middleware/check-object-id');
 const router = express.Router();
 const {
     getAllJobs,
@@ -9,6 +10,6 @@ const {
 
 
 router.route('/').post(createJob).get(getAllJobs)
-router.route('/:id').get(getJob).delete(deleteJob).patch(updateJob);
+router.route('/:id').get(checkObjectid, getJob).delete(checkObjectid ,deleteJob).patch(checkObjectid ,updateJob);
 
 module.exports = router
