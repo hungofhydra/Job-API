@@ -46,7 +46,7 @@ paths:
                   token:
                     type: string
               example:
-                msg: Register success
+                msg: Registered successfully
                 user:
                   name : Nguyen Tan Hung
                   mail : nguyentanhung@gmail.com  
@@ -89,7 +89,7 @@ paths:
                   token:
                     type: string
               example:
-                msg: Login success
+                msg: Logined successfully
                 user: 
                   name : 'Nguyen Tan Hung'
                 token: 'Token'
@@ -125,7 +125,7 @@ paths:
                   forgotPasswordToken:
                     type: string
               example:
-                msg: Send reset password success
+                msg: Sent password request successfully
                 forgotPasswordToken: Token
       deprecated: false
   /auth/reset:
@@ -156,7 +156,7 @@ paths:
                   msg: 
                     type: string
               example:
-                msg: Reset password success
+                msg: Reseted password successfully
       deprecated: false
       security:
       - bearer: []
@@ -209,7 +209,7 @@ paths:
                         __v:
                           type: number
               example:
-                msg : Create job success
+                msg : Created job successfully
                 job:           
                     status: pending          
                     _id: 62d7a56dbae0d436c47a58e9
@@ -394,7 +394,7 @@ paths:
                         __v:
                           type: number
               example:
-                msg : Update job success
+                msg : Updated Job Successfully
                 job:           
                     status: pending          
                     _id: 62d7a56dbae0d436c47a58e9
@@ -432,7 +432,7 @@ paths:
                     msg:
                       type: string
               example:
-                msg : Delete success
+                msg : Deleted Job Successfully
       deprecated: false
       security:
       - bearer: []
