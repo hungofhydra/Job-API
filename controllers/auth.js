@@ -6,9 +6,9 @@ const bcrypt = require('bcryptjs')
 //Register 
 const register = async (req, res) => {
     const {name, email, password} = req.body;
-    // if (!name || !email || !password) {
-    //     throw new BadRequestError('Please provide email, password and name');
-    // }
+     if (!name || !email || !password) {
+         throw new BadRequestError('Please provide email, password and name');
+     }
     const user = await User.create(req.body)
     const token = user.createJWT();
     res.status(StatusCodes.CREATED).json({ msg : 'Registered successfully', user : {name : user.name, mail : user.email}, token})
@@ -22,12 +22,12 @@ const login = async (req,res) => {
 
     const user = await User.findOne({email})
     if(!user) {
-        throw new UnauthenticatedError('Invalid Credentials')
+        throw new UnauthenticatedError(`The email address ${email} you entered is not connected to an account`)
     }
 
     //compare password
     const isPasswordCorrect = await user.comparePassword(password);
-    if (!isPasswordCorrect)  throw new UnauthenticatedError('Invalid Credentials');
+    if (!isPasswordCorrect)  throw new UnauthenticatedError('Invalid password');
     //send token
     const token = user.createJWT();
     res.status(StatusCodes.OK).json({ msg : 'Logined successfully' , user : {name: user.name}, token});
@@ -39,7 +39,7 @@ const forgotPassword = async(req,res) => {
 
     const user = await User.findOne({email})
     if(!user) {
-        throw new UnauthenticatedError('Invalid Credentials')
+        throw new UnauthenticatedError(`The email address ${email} you entered is not connected to an account`)
     }
 
     const forgotPasswordToken = user.createPasswordToken();
