@@ -3,6 +3,7 @@ const {StatusCodes} = require('http-status-codes')
 const {BadRequestError, UnauthenticatedError} = require('../errors')
 const bcrypt = require('bcryptjs')
 const sgMail = require('@sendgrid/mail')
+const jwt = require('jsonwebtoken')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 //Register 
 const register = async (req, res) => {
@@ -49,7 +50,7 @@ const forgotPassword = async(req,res) => {
         to: email, // Change to your recipient
         from: 'hungofhydra@gmail.com', // Change to your verified sender
         subject: 'Reset Password Email',
-        html : `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><a href="https://job-api-example.herokuapp.com/api/v1/auth/resetPassword/${forgotPasswordToken}">Reset Password</a></body></html>`,
+        html : `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><a href="https://job-api-example.herokuapp.com/api/v1/auth/resetpassword/${forgotPasswordToken}">Reset Password</a></body></html>`,
       }
       sgMail
         .send(msg)
@@ -62,50 +63,51 @@ const forgotPassword = async(req,res) => {
     res.status(StatusCodes.OK).json({ msg : 'Sent password request to email successfully'});
 }
 
-const resetPassword = async(req,res) => {
-   let {
-        reset : {userId, email},
-        body : {newPassword : password}
-   } = req
+// const resetPassword = async(req,res) => {
+//    let {
+//         reset : {userId, email},
+//         body : {newPassword : password}
+//    } = req
 
-   if (password === '') {
-    throw new BadRequestError('New password fields cannot be empty')
-    }
-    const salt = await bcrypt.genSalt(10);
-    password = await bcrypt.hash(password, salt);
+//    if (password === '') {
+//     throw new BadRequestError('New password fields cannot be empty')
+//     }
+//     const salt = await bcrypt.genSalt(10);
+//     password = await bcrypt.hash(password, salt);
 
-    const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
-    if (!user) throw new NotFoundError(`No user with id ${userId}`);
+//     const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
+//     if (!user) throw new NotFoundError(`No user with id ${userId}`);
     
-    res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully'});
+//     res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully'});
    
-}
-const resetPassword2 = async(req,res) => {
+// }
+
+const resetPassword = async(req,res) => {
     let {
-         prams : {passwordToken}
+        reset : {userId, email},
+        params : {passwordToken}
     } = req
  
     
     if (passwordToken === '') {
      throw new UnauthenticatedError('Link had expired')
     }
-    const payload = jwt.verify(passwordToken, process.env.JWT_SECRET);
 
-    let newPassword = (Math.random() + 1).toString(36).substring(7);
+    let newPassword = (Math.random() + 1).toString(36).substring(2);
+
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(newPassword, salt);
  
-    const user = await User.findByIdAndUpdate({_id : payload.userId, email: payload.email}, {newPassword}, {new : true, runValidators : true})
+    const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
     if (!user) throw new NotFoundError(`No user with id ${userId}`);
      
     res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully', newPassword});
-    
+
  }
 
 module.exports = {
     register,
     login,
     forgotPassword,
-    resetPassword,
-    resetPassword2
+    resetPassword
 }
