@@ -49,7 +49,7 @@ const forgotPassword = async(req,res) => {
         to: email, // Change to your recipient
         from: 'hungofhydra@gmail.com', // Change to your verified sender
         subject: 'Reset Password Email',
-        html : `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><a href="https://job-api-example.herokuapp.com/api/v1/auth/reset2/${forgotPasswordToken}">Reset Password</a></body></html>`,
+        html : `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><a href="https://job-api-example.herokuapp.com/api/v1/auth/resetPassword/${forgotPasswordToken}">Reset Password</a></body></html>`,
       }
       sgMail
         .send(msg)
