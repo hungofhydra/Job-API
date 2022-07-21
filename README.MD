@@ -62,9 +62,7 @@ Email Validation Regex
 Swagger UI
 
 #### TO DO LIST
-- Should implement response template 
 - Check object id middleware (DELETE)
-- Duplicate email: should have error code along with error message (same with other APIs)
 - Split wrong password error with not found email error (invalid) when logging in
 - Forgot password: research sending email with a link to reset password (or a new random password string for simplicity first). Consider using sendgrid
 ```yaml
