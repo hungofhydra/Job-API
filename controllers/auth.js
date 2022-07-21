@@ -82,7 +82,6 @@ const resetPassword = async(req,res) => {
 }
 const resetPassword2 = async(req,res) => {
     let {
-         reset : {userId, email},
          prams : {passwordToken}
     } = req
  
@@ -90,12 +89,13 @@ const resetPassword2 = async(req,res) => {
     if (passwordToken === '') {
      throw new UnauthenticatedError('Link had expired')
     }
+    const payload = jwt.verify(passwordToken, process.env.JWT_SECRET);
 
     let newPassword = (Math.random() + 1).toString(36).substring(7);
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(newPassword, salt);
  
-    const user = await User.findByIdAndUpdate({_id : userId, email}, {newPassword}, {new : true, runValidators : true})
+    const user = await User.findByIdAndUpdate({_id : payload.userId, email: payload.email}, {newPassword}, {new : true, runValidators : true})
     if (!user) throw new NotFoundError(`No user with id ${userId}`);
      
     res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully', newPassword});

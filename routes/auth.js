@@ -6,6 +6,6 @@ const {login, register, forgotPassword, resetPassword, resetPassword2} = require
 router.post('/register', register);
 router.post('/login', login);
 router.post('/forgot', forgotPassword)
-router.post('/reset', authenticationPassword, resetPassword)
-router.post('/reset2/:passwordToken', authenticationPassword, resetPassword2)
+router.post('/reset', authenticationPassword, resetPassword);
+router.post('/resetPassword/:passwordToken', resetPassword2)
 module.exports = router
