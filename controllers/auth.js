@@ -63,25 +63,6 @@ const forgotPassword = async(req,res) => {
     res.status(StatusCodes.OK).json({ msg : 'Sent password request to email successfully'});
 }
 
-// const resetPassword = async(req,res) => {
-//    let {
-//         reset : {userId, email},
-//         body : {newPassword : password}
-//    } = req
-
-//    if (password === '') {
-//     throw new BadRequestError('New password fields cannot be empty')
-//     }
-//     const salt = await bcrypt.genSalt(10);
-//     password = await bcrypt.hash(password, salt);
-
-//     const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
-//     if (!user) throw new NotFoundError(`No user with id ${userId}`);
-    
-//     res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully'});
-   
-// }
-
 const resetPassword = async(req,res) => {
     let {
         reset : {userId, email},
@@ -92,7 +73,6 @@ const resetPassword = async(req,res) => {
     if (passwordToken === '') {
      throw new UnauthenticatedError('Link had expired')
     }
-
     let newPassword = (Math.random() + 1).toString(36).substring(2);
 
     const salt = await bcrypt.genSalt(10);
@@ -119,6 +99,19 @@ const resetPassword = async(req,res) => {
     res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully. Email with new password has been sent to your email', newPassword});
 
  }
+
+//Change password, make sure the new password and old password are not the same. Get old password from User model. Userid and email is from http request user.
+// const changePassword = async(req,res) => {
+//     const {userId, email} = req.user
+//     const {oldPassword, newPassword} = req.body
+//     if (oldPassword === newPassword) throw new BadRequestError('New password must be different from old password');
+//     const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
+//     if (!user) throw new NotFoundError(`No user with id ${userId}`);
+//     res.status(StatusCodes.OK).json({ msg : 'Changed password successfully'});
+// }
+
+
+
 
 module.exports = {
     register,
