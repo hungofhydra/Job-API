@@ -113,7 +113,7 @@ paths:
         required: true
       responses:
         '200':
-          description: 'Send Back Password Reset Token (This Token IS NOT User Token)'
+          description: 'Send Back Email To User, Including Link To Reset Password'
           headers: {}
           content:
             application/json:
@@ -125,42 +125,9 @@ paths:
                   forgotPasswordToken:
                     type: string
               example:
-                msg: Sent password request successfully
-                forgotPasswordToken: Token
+                msg: Sent password request to email successfully
       deprecated: false
-  /auth/reset:
-    post:
-      tags:
-      - Auth
-      summary: Reset Password
-      operationId: ResetPassword
-      parameters: []
-      requestBody:
-        description: 'Require new password'
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ResetPasswordRequest'
-            example:
-              newPassword: '987654'
-        required: true
-      responses:
-        '200':
-          description: 'Send back message'
-          headers: {}
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  msg: 
-                    type: string
-              example:
-                msg: Reseted password successfully
-      deprecated: false
-      security:
-      - bearer: []
-              
+
   /jobs:
     post:
       tags:
