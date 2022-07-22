@@ -62,7 +62,7 @@ Email Validation Regex
 Swagger UI
 
 #### TO DO LIST
-- Forgot password: research sending email with a link to reset password (or a new random password string for simplicity first). Consider using sendgrid
+
 ```yaml
 /jobs/{id}:
   parameters:

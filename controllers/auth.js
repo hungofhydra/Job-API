@@ -101,7 +101,22 @@ const resetPassword = async(req,res) => {
     const user = await User.findByIdAndUpdate({_id : userId, email}, {password}, {new : true, runValidators : true})
     if (!user) throw new NotFoundError(`No user with id ${userId}`);
      
-    res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully', newPassword});
+    const msg = {
+        to: email, // Change to your recipient
+        from: 'hungofhydra@gmail.com', // Change to your verified sender
+        subject: 'New Password',
+        text : `Your new password is: ${newPassword}`,
+      }
+      sgMail
+        .send(msg)
+        .then(() => {s
+          console.log('Email sent')
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+
+    res.status(StatusCodes.OK).json({ msg : 'Reseted password successfully. Email with new password has been sent to your email', newPassword});
 
  }
 
